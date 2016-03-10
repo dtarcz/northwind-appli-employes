@@ -13,10 +13,16 @@ function chargerClasse($classe)
 spl_autoload_register('chargerClasse');
 */
 
-$employe = new Employe('Davolio');
+//on recupere des infos dans la base de donnees pour alimenter le constructeur
+$reqselect = $bdd->prepare("SELECT LastName, FirstName, EmployeeID, Title, ReportsTo FROM Employees WHERE EmployeeID=1");
+$reqselect->execute();
+
+$e = $reqselect->fetch();
+
+//var_dump($entree);
+
+//instanciation de l'objet employe :
+$employe = new Employe($e['EmployeeID'], $e[0], $e['FirstName'], $e['Title'], $e['ReportsTo']);
 //var_dump($employe);
-echo "<p>" . $employe->Nom . "</p>";
-echo "<p>" . $employe->Prenom . "</p>";
-echo "<p>" . $employe->ID . "</p>";
-echo "<p>" . $employe->Chef . "</p>";
-echo "<p>" . $employe->Titre . "</p>";
+$employe->afficherID();
+$_SESSION['employe']=$employe;
